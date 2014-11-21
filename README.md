@@ -5,8 +5,9 @@ Docker Image for InfluxDB
 * Plugins: Graphite, CollectD
 
 
-    docker build -t systemli/influxdb .
+		docker pull systemli/influxdb
 
-    docker run --rm -it -p 8083:8083 -p 8086:8086 systemli/influxdb
+		docker run --rm -it -p 8083:8083 -p 8086:8086 systemli/influxdb
+
 
 * see Dockerfile for all exposed ports and volumes
