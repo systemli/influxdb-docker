@@ -4,7 +4,7 @@ MAINTAINER louis <louis@systemli.org>
 
 ENV DEBIAN_FRONTEND noninteractive
 
-ENV INFLUXDB_VERSION 0.8.6
+ENV INFLUXDB_VERSION 0.8.8
 
 RUN apt-get update && apt-get install -y curl && \
 curl -s -o /tmp/influxdb_latest_amd64.deb https://s3.amazonaws.com/influxdb/influxdb_${INFLUXDB_VERSION}_amd64.deb && \

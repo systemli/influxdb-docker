@@ -1,7 +1,7 @@
 Docker Image for InfluxDB
 =========================
 
-* Version: 0.8.6
+* Version: 0.8.8
 * Plugins: Graphite, CollectD
 
 
