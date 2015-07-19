@@ -4,7 +4,7 @@ Docker Image for InfluxDB
 [![image](http://dockeri.co/image/systemli/influxdb)](https://registry.hub.docker.com/u/systemli/influxdb/)
 
 
-* **Latest Version: 0.9.1**
+* **Latest Version: [0.9.1](https://github.com/systemli/influxdb-docker/tree/master/0.9.1)**
 * Plugins: Graphite, CollectD, OpenTSDB
 
 
