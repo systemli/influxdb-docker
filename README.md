@@ -2,7 +2,7 @@ Docker Image for InfluxDB
 =========================
 
 * Versions:
-	* 0.9.0-rc24
+	* 0.9.1
 	* 0.8.8
 	* 0.8.6
 * Plugins: Graphite, CollectD, OpenTSDB
@@ -21,6 +21,5 @@ Docker Image for InfluxDB
 		-v /dev/log:/dev/log \
 		-v /opt/influxdb:/data \
 		systemli/influxdb:latest
-
 
 * see Dockerfile for all exposed ports and volumes
