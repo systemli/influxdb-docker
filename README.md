@@ -1,10 +1,10 @@
 Docker Image for InfluxDB
 =========================
 
-* Versions:
-	* 0.9.1
-	* 0.8.8
-	* 0.8.6
+[![image](http://dockeri.co/image/systemli/influxdb)](https://registry.hub.docker.com/u/systemli/influxdb/)
+
+
+* **Latest Version: 0.9.1**
 * Plugins: Graphite, CollectD, OpenTSDB
 
 
@@ -13,13 +13,4 @@ Docker Image for InfluxDB
 		# simple run of influxdb
 		docker run --rm -it -p 8083:8083 -p 8086:8086 systemli/influxdb
 
-		# with linked ports for api, admin, graphite and collectd
-		# syslog linked into the container
-		# data persisted outside of the container in /opt/influxdb
-		docker run -d --name influxdb \
-		-p 8083:8083 -p 8086:8086 -p 2003:2003 -p 25826:25826 \
-		-v /dev/log:/dev/log \
-		-v /opt/influxdb:/data \
-		systemli/influxdb:latest
-
-* see Dockerfile for all exposed ports and volumes
+* see Dockerfile in subdirectories for all exposed ports, volumes and run command
