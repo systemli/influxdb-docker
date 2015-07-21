@@ -1,0 +1,159 @@
+# Welcome to the InfluxDB configuration file.
+
+# If hostname (on the OS) doesn't return a name that can be resolved by the other
+# systems in the cluster, you'll have to set the hostname to an IP or something
+# that can be resolved here.
+# hostname = ""
+
+bind-address = "%INFLUXDB_BIND_ADDRESS%"
+
+# Once every 24 hours InfluxDB will report anonymous data to m.influxdb.com
+# The data includes raft name (random 8 bytes), os, arch and version
+# We don't track ip addresses of servers reporting. This is only used
+# to track the number of instances running and the versions which
+# is very helpful for us.
+# Change this option to true to disable reporting.
+reporting-disabled = %INFLUXDB_REPORTING_DISABLED%
+
+[logging]
+# logging level can be one of "fine", "debug", "info", "warn" or "error"
+level  = "%INFLUXDB_LOGGING_LEVEL%"
+file   = "%INFLUXDB_LOGGING_FILE%"         # stdout to log to standard out, or syslog facility
+
+# Configure the admin server
+[admin]
+port   = %INFLUXDB_ADMIN_PORT%              # binding is disabled if the port isn't set
+
+# Configure the http api
+[api]
+port     = %INFLUXDB_API_PORT%    # binding is disabled if the port isn't set
+# ssl-port = 8084    # Ssl support is enabled if you set a port and cert
+# ssl-cert = /path/to/cert.pem
+
+# connections will timeout after this amount of time. Ensures that clients that misbehave
+# and keep alive connections they don't use won't end up connection a million times.
+# However, if a request is taking longer than this to complete, could be a problem.
+read-timeout = "%INFLUXDB_READ_TIMEOUT%"
+
+[input_plugins]
+
+  # Configure the graphite api
+  [input_plugins.graphite]
+  enabled = %INFLUXDB_GRAPHITE_ENABLED%
+  address = "%INFLUXDB_GRAPHITE_ADDRESS%" # If not set, is actually set to bind-address.
+  port = %INFLUXDB_GRAPHITE_PORT%
+  database = "%INFLUXDB_GRAPHITE_DATABASE%"  # store graphite data in this database
+  udp_enabled = %INFLUXDB_GRAPHITE_UDP_ENABLED% # enable udp interface on the same port as the tcp interface
+
+  # Configure the collectd api
+  [input_plugins.collectd]
+  enabled = %INFLUXDB_COLLECTD_ENABLED%
+  address = "%INFLUXDB_COLLECTD_ADDRESS%" # If not set, is actually set to bind-address.
+  port = %INFLUXDB_COLLECTD_PORT%
+  database = "%INFLUXDB_COLLECTD_DATABASE%"
+  # types.db can be found in a collectd installation or on github:
+  # https://github.com/collectd/collectd/blob/master/src/types.db
+  typesdb = "%INFLUXDB_COLLECTD_TYPESDB%" # The path to the collectd types.db file
+
+  # Configure the udp api
+  [input_plugins.udp]
+  enabled = %INFLUXDB_UDP_ENABLED%
+  port = %INFLUXDB_UDP_PORT%
+  database = "%INFLUXDB_UDP_DATABASE%"
+
+  # Configure multiple udp apis each can write to separate db.  Just
+  # repeat the following section to enable multiple udp apis on
+  # different ports.
+  [[input_plugins.udp_servers]] # array of tables
+  enabled = %INFLUXDB_UDP_SERVERS_ENABLED%
+  port = %INFLUXDB_UDP_SERVERS_PORT%
+  database = "%INFLUXDB_UDP_SERVERS_DATABASE%"
+
+# Raft configuration
+[raft]
+# The raft port should be open between all servers in a cluster.
+# However, this port shouldn't be accessible from the internet.
+
+port = %INFLUXDB_RAFT_PORT%
+
+# Where the raft logs are stored. The user running InfluxDB will need read/write access.
+dir  = "%INFLUXDB_RAFT_DIR%"
+
+debug = %INFLUXDB_RAFT_DEBUG%
+
+election-timeout = "%INFLUXDB_ELECTION_TIMEOUT%"
+
+[storage]
+
+dir = "%INFLUXDB_STORAGE_DIR%"
+# How many requests to potentially buffer in memory. If the buffer gets filled then writes
+# will still be logged and once the local storage has caught up (or compacted) the writes
+# will be replayed from the WAL
+write-buffer-size = %INFLUXDB_STORAGE_WRITE_BUFFER_SIZE%
+
+# The default setting on this is 0, which means unlimited. Set this to something if you want to
+# limit the max number of open files. max-open-files is per shard so this * that will be max.
+max-open-shards = %INFLUXDB_STORAGE_MAX_OPEN_SHARDS%
+
+# The default setting is 100. This option tells how many points will be fetched from LevelDb before
+# they get flushed into backend.
+point-batch-size = %INFLUXDB_STORAGE_POINT_BATCH_SIZE%
+
+# The number of points to batch in memory before writing them to leveldb. Lowering this number will
+# reduce the memory usage, but will result in slower writes.
+write-batch-size = %INFLUXDB_STORAGE_WRITE_BATCH_SIZE%
+
+# The server will check this often for shards that have expired that should be cleared.
+retention-sweep-period = "%INFLUXDB_STORAGE_RETENTION_SWEEP_PERIOD%"
+
+[cluster]
+# A comma separated list of servers to seed
+# this server. this is only relevant when the
+# server is joining a new cluster. Otherwise
+# the server will use the list of known servers
+# prior to shutting down. Any server can be pointed to
+# as a seed. It will find the Raft leader automatically.
+
+# Here's an example. Note that the port on the host is the same as the raft port.
+seed-servers = %INFLUXDB_CLUSTER_SEED_SERVERS%
+
+# Replication happens over a TCP connection with a Protobuf protocol.
+# This port should be reachable between all servers in a cluster.
+# However, this port shouldn't be accessible from the internet.
+
+protobuf_port = %INFLUXDB_CLUSTER_PROTOBUF_PORT%
+protobuf_timeout = "%INFLUXDB_CLUSTER_PROTOBUF_TIMEOUT%" # the write timeout on the protobuf conn any duration parseable by time.ParseDuration
+protobuf_heartbeat = "%INFLUXDB_CLUSTER_PROTOBUF_HEARTBEAT%" # the heartbeat interval between the servers. must be parseable by time.ParseDuration
+protobuf_min_backoff = "%INFLUXDB_CLUSTER_PROTOBUF_MIN_BACKOFF%" # the minimum backoff after a failed heartbeat attempt
+protobuf_max_backoff = "%INFLUXDB_CLUSTER_PROTOBUF_MAX_BACKOFF%" # the maxmimum backoff after a failed heartbeat attempt
+
+# How many write requests to potentially buffer in memory per server. If the buffer gets filled then writes
+# will still be logged and once the server has caught up (or come back online) the writes
+# will be replayed from the WAL
+write-buffer-size = %INFLUXDB_CLUSTER_WRITE_BUFFER_SIZE%
+
+# the maximum number of responses to buffer from remote nodes, if the
+# expected number of responses exceed this number then querying will
+# happen sequentially and the buffer size will be limited to this
+# number
+max-response-buffer-size = %INFLUXDB_CLUSTER_MAX_RESPONSE_BUFFER_SIZE%
+
+# When queries get distributed out to shards, they go in parallel. This means that results can get buffered
+# in memory since results will come in any order, but have to be processed in the correct time order.
+# Setting this higher will give better performance, but you'll need more memory. Setting this to 1 will ensure
+# that you don't need to buffer in memory, but you won't get the best performance.
+concurrent-shard-query-limit = %INFLUXDB_CLUSTER_CONCURRENT_SHARD_QUERY_LIMIT%
+
+[wal]
+
+dir   = "%INFLUXDB_WAL_DIR%"
+flush-after = %INFLUXDB_WAL_FLUSH_AFTER% # the number of writes after which wal will be flushed, 0 for flushing on every write
+bookmark-after = %INFLUXDB_WAL_BOOKMARK_AFTER% # the number of writes after which a bookmark will be created
+
+# the number of writes after which an index entry is created pointing
+# to the offset of the first request, default to 1k
+index-after = %INFLUXDB_WAL_INDEX_AFTER%
+
+# the number of requests per one log file, if new requests came in a
+# new log file will be created
+requests-per-logfile = %INFLUXDB_WAL_REQUESTS_PER_LOGFILE%
