@@ -3,15 +3,15 @@ Docker Image for InfluxDB
 
 [![image](http://dockeri.co/image/systemli/influxdb)](https://registry.hub.docker.com/u/systemli/influxdb/)
 
-InfluxDB Version: 0.9.2
+InfluxDB Version: 0.9.4.1
 
 
-	docker run --name influxdb -p 8083:8083 -p 8086:8086 systemli/influxdb:0.9.2
+	docker run --name influxdb -p 8083:8083 -p 8086:8086 systemli/influxdb:0.9.4.1
 
 
 All configuration values can overwritten by environment variables
 
-	docker run --name influxdb -p 8083:8083 -p 8086:8086 -e INFLUXDB_REPORTING_DISABLED="true" systemli/influxdb:0.9.2
+	docker run --name influxdb -p 8083:8083 -p 8086:8086 -e INFLUXDB_REPORTING_DISABLED="true" systemli/influxdb:0.9.4.1
 
 The defaults:
 
